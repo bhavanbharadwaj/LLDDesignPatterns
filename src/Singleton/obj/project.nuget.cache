@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "sIhRQ8m0KR8=",
+  "dgSpecHash": "OYBoQJgxE7c=",
   "success": true,
   "projectFilePath": "/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/Singleton.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/bhaveensaguturu/.nuget/packages/microsoft.netcore.app.ref/8.0.25/microsoft.netcore.app.ref.8.0.25.nupkg.sha512",
+    "/Users/bhaveensaguturu/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.25/microsoft.aspnetcore.app.ref.8.0.25.nupkg.sha512",
+    "/Users/bhaveensaguturu/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.25/microsoft.netcore.app.host.osx-arm64.8.0.25.nupkg.sha512"
+  ],
   "logs": []
 }

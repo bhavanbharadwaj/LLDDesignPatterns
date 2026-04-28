@@ -1,9 +1,8 @@
-namespace Factory
+using Factory;
+
+public enum PaymentType
 {
-    public enum PaymentType
-    {
-        CreditCard,
-        Bitcoin,
-        Upi
-    }
+    CreditCard,
+    Bitcoin,
+    Upi
 }

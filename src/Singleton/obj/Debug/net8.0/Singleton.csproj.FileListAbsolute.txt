@@ -1,0 +1,15 @@
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/bin/Debug/net8.0/Singleton
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/bin/Debug/net8.0/Singleton.deps.json
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/bin/Debug/net8.0/Singleton.runtimeconfig.json
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/bin/Debug/net8.0/Singleton.dll
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/bin/Debug/net8.0/Singleton.pdb
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.GeneratedMSBuildEditorConfig.editorconfig
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.AssemblyInfoInputs.cache
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.AssemblyInfo.cs
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.csproj.CoreCompileInputs.cache
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.sourcelink.json
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.dll
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/refint/Singleton.dll
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.pdb
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/Singleton.genruntimeconfig.cache
+/Users/bhaveensaguturu/LLD-Design-Patterns/src/Singleton/obj/Debug/net8.0/ref/Singleton.dll

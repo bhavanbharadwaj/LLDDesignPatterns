@@ -1,7 +1,5 @@
-namespace Factory.Interfaces
+namespace Factory.Interfaces;
+public interface IPayment
 {
-    public interface IPayment
-    {
-        public void ProcessPayment(decimal amount);
-    }
+    public void ProcessPayment(decimal amount);
 }
