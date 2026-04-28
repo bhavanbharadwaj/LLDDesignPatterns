@@ -2,7 +2,6 @@
 using Factory.Interfaces;
 using Factory.Factories;
 using Factory.payments;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Factory
 {
@@ -12,26 +11,73 @@ namespace Factory
         {
             var services = new ServiceCollection();
 
+            // Register concrete payment implementations
             services.AddTransient<CreditCardPayment>();
             services.AddTransient<BitcoinPayment>();
             services.AddTransient<UpiPayment>();
 
-            services.AddSingleton<IPaymentFactory, PaymentFactoryDI>();
-            services.AddSingleton<IPaymentFactory, PaymentFactoryDIWithDict>();
-            services.AddSingleton<IPaymentFactory, PaymentFactoryDICleanerVersion>();
+            // Register factory implementations
+            services.AddSingleton<PaymentFactoryDI>();
+            services.AddSingleton<PaymentFactoryDIWithDict>();
+            services.AddSingleton<PaymentFactoryDICleanerVersion>();
 
             var serviceProvider = services.BuildServiceProvider();
 
-            //var factory = serviceProvider.GetRequiredService<IPaymentFactory>();
-            //IPayment payment = factory.CreatePayment(PaymentType.CreditCard);
+            /*
+             * ============================================================
+             * 1. SWITCH-BASED FACTORY
+             * ============================================================
+             * Uses switch-case internally to resolve payment objects.
+             * Cleaner than direct object creation but still requires
+             * modifying switch statements when adding new payment types.
+             */
 
-            // var payment = new PaymentFactoryDIWithDict(serviceProvider)
-            //                  .CreatePayment(PaymentType.CreditCard);
+            // var switchFactory =
+            //     serviceProvider.GetRequiredService<PaymentFactoryDI>();
 
-            var payment = new PaymentFactoryDICleanerVersion(serviceProvider)
-                             .CreatePayment(PaymentType.CreditCard);
+            // IPayment switchPayment =
+            //     switchFactory.CreatePayment(PaymentType.CreditCard);
 
-            payment.ProcessPayment(100.00m);
+            // switchPayment.ProcessPayment(100.00m);
+
+
+
+            /*
+             * ============================================================
+             * 2. DI + DICTIONARY FACTORY
+             * ============================================================
+             * Replaces switch-case with Dictionary<PaymentType, Func<IPayment>>
+             * for cleaner and more maintainable resolver mapping.
+             */
+
+            // var dictFactory =
+            //     serviceProvider.GetRequiredService<PaymentFactoryDIWithDict>();
+
+            // IPayment dictPayment =
+            //     dictFactory.CreatePayment(PaymentType.Bitcoin);
+
+            // dictPayment.ProcessPayment(200.00m);
+
+
+
+            /*
+             * ============================================================
+             * 3. CLEANER DICTIONARY-BASED FACTORY (CURRENT VERSION)
+             * ============================================================
+             * Uses:
+             * - IReadOnlyDictionary
+             * - Method group syntax
+             * - DI container
+             * - Resolver mapping approach
+             */
+
+            var cleanerFactory =
+                serviceProvider.GetRequiredService<PaymentFactoryDICleanerVersion>();
+
+            IPayment payment =
+                cleanerFactory.CreatePayment(PaymentType.Upi);
+
+            payment.ProcessPayment(300.00m);
         }
     }
 }
