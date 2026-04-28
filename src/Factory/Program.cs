@@ -2,6 +2,7 @@
 using Factory.Interfaces;
 using Factory.Factories;
 using Factory.payments;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Factory
 {
@@ -16,12 +17,20 @@ namespace Factory
             services.AddTransient<UpiPayment>();
 
             services.AddSingleton<IPaymentFactory, PaymentFactoryDI>();
+            services.AddSingleton<IPaymentFactory, PaymentFactoryDIWithDict>();
+            services.AddSingleton<IPaymentFactory, PaymentFactoryDICleanerVersion>();
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var factory = serviceProvider.GetRequiredService<IPaymentFactory>();
+            //var factory = serviceProvider.GetRequiredService<IPaymentFactory>();
+            //IPayment payment = factory.CreatePayment(PaymentType.CreditCard);
 
-            IPayment payment = factory.CreatePayment(PaymentType.CreditCard);
+            // var payment = new PaymentFactoryDIWithDict(serviceProvider)
+            //                  .CreatePayment(PaymentType.CreditCard);
+
+            var payment = new PaymentFactoryDICleanerVersion(serviceProvider)
+                             .CreatePayment(PaymentType.CreditCard);
+
             payment.ProcessPayment(100.00m);
         }
     }

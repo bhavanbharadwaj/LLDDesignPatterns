@@ -2,263 +2,286 @@
 
 ## 📌 Overview
 
-The **Factory Design Pattern** is a **creational design pattern** used to create objects **without exposing the instantiation logic to the client**.
+The **Factory Design Pattern** is a **Creational Design Pattern** used to create objects without exposing object creation logic to the client.
 
-Instead of directly using `new`, object creation is delegated to a factory.
+Instead of directly creating objects using `new`, object creation responsibility is delegated to a factory.
 
-> “Define an interface for creating an object, but let subclasses decide which class to instantiate.” ([GeeksforGeeks][1])
+This project demonstrates the evolution of Factory Pattern implementations from:
+
+1. Simple Factory using `switch`
+2. Factory Method using inheritance
+3. Factory + Dependency Injection
+4. Dictionary-based resolver factory
 
 ---
 
-## 🚨 Problem
+# 🚨 Problem
 
 Without Factory Pattern:
 
 ```csharp
 if(type == "upi")
+{
     payment = new UpiPayment();
+}
 else if(type == "credit")
+{
     payment = new CreditCardPayment();
-```
+}
 
-### Issues:
+❌ Issues
 
-* Tight coupling ❌
-* Violates Open/Closed Principle ❌
-* Hard to scale ❌
-* Object creation logic scattered ❌
 
----
+Tight coupling
 
-## ✅ Solution
 
-Use a **Factory** to centralize object creation.
+Hard to maintain
 
-```csharp
+
+Difficult to scale
+
+
+Object creation logic scattered across the codebase
+
+
+Violates Open/Closed Principle
+
+
+
+✅ Solution
+Use a Factory to centralize object creation.
 IPayment payment = factory.CreatePayment(PaymentType.Upi);
-```
 
----
+🧠 Key Idea
+Factory Pattern helps in:
 
-## 🧠 Key Idea
 
-👉 Encapsulate object creation
-👉 Depend on abstractions, not concrete classes
+Encapsulating object creation
 
-Factory pattern helps in **decoupling client code from implementation details** ([TutorialsPoint][2])
 
----
+Reducing direct dependency on concrete classes
 
-## 🏗️ Project Structure
 
-```
-/FactoryPattern
- ├── Interfaces/
- │    └── IPayment.cs
- │
- ├── Models/
- │    ├── CreditCardPayment.cs
- │    ├── UpiPayment.cs
- │    ├── BitcoinPayment.cs
- │    └── PaymentType.cs
- │
- ├── Factories/
- │    ├── PaymentFactory.cs              (Factory Method - Abstract)
- │    ├── CreditCardFactory.cs
- │    ├── UpiFactory.cs
- │    ├── BitcoinFactory.cs
- │    ├── IPaymentFactory.cs            (DI-based abstraction)
- │    └── PaymentFactoryDI.cs           (DI-based factory)
- │
- ├── Program.cs
- └── README.md
-```
+Improving maintainability
 
----
 
-## ⚙️ Implementation Breakdown
+Supporting scalability
 
-### 1. Product Interface
 
-```csharp
-public interface IPayment
-{
-    void ProcessPayment();
-}
-```
+The client depends on abstractions (IPayment) instead of concrete implementations.
 
----
+🏗️ Project Structure
+Factory/├── Factories/│   ├── BitcoinFactory.cs│   ├── CreditCardFactory.cs│   ├── IPaymentFactory.cs│   ├── PaymentFactory.cs│   ├── PaymentFactoryDI.cs│   ├── PaymentFactoryDIWithDict.cs│   ├── PaymentFactoryDICleanerVersion.cs│   └── UPIFactory.cs│├── Interfaces/│   └── IPayment.cs│├── payments/│   ├── BitcoinPayment.cs│   ├── CreditCardPayment.cs│   └── UpiPayment.cs│├── PaymentType.cs├── Program.cs├── Factory.csproj└── README.md
 
-### 2. Concrete Implementations
+⚙️ Implementation Breakdown
+1️⃣ Product Interface
+public interface IPayment{    void ProcessPayment(decimal amount);}
 
-* CreditCardPayment
-* UpiPayment
-* BitcoinPayment
+2️⃣ Concrete Implementations
 
----
 
-### 3. Factory Method Pattern
+CreditCardPayment
 
-* `PaymentFactory` → Abstract class
-* `UpiFactory`, `CreditCardFactory` → Concrete factories
 
-👉 Subclasses decide object creation
+UpiPayment
 
----
 
-### 4. DI-Based Factory (Real-world)
+BitcoinPayment
 
-```csharp
-public interface IPaymentFactory
-{
-    IPayment CreatePayment(PaymentType type);
-}
-```
 
-```csharp
-public class PaymentFactoryDI : IPaymentFactory
-{
-    private readonly IServiceProvider _serviceProvider;
+Each implementation contains its own payment processing behavior.
 
-    public PaymentFactoryDI(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+🏭 Factory Method Pattern
+Abstract Factory
+public abstract class PaymentFactory{    public abstract IPayment CreatePayment();}
+Concrete Factories
 
-    public IPayment CreatePayment(PaymentType type)
-    {
-        return type switch
-        {
-            PaymentType.Upi => _serviceProvider.GetRequiredService<UpiPayment>(),
-            PaymentType.CreditCard => _serviceProvider.GetRequiredService<CreditCardPayment>(),
-            PaymentType.Bitcoin => _serviceProvider.GetRequiredService<BitcoinPayment>(),
-            _ => throw new ArgumentException("Invalid type")
-        };
-    }
-}
-```
 
----
+CreditCardFactory
 
-## 🔥 Why Factory Pattern?
 
-### ✅ Loose Coupling
+UpiFactory
 
-Client depends on `IPayment`, not concrete classes
-→ Changes don’t ripple across code
 
----
+BitcoinFactory
 
-### ✅ Open/Closed Principle
 
-Add new payment:
+Each factory is responsible for creating its corresponding payment object.
 
-* Create new class
-* Register in DI
-  👉 No change in existing logic
+🚀 Factory + Dependency Injection
+This project also demonstrates a more practical real-world approach using:
 
----
 
-### ✅ Centralized Object Creation
+Dependency Injection
 
-All object creation logic in one place
 
----
+IServiceProvider
 
-### ✅ Better Testability
 
-Factory can be mocked easily
+Runtime object resolution
 
----
 
-## ⚠️ Trade-offs
 
-* Adds extra abstraction layer
-* Slightly more complex
-* Overkill for small applications
+🔁 Switch-Based DI Factory
+public class PaymentFactoryDI : IPaymentFactory{    private readonly IServiceProvider _serviceProvider;    public PaymentFactoryDI(IServiceProvider serviceProvider)    {        _serviceProvider = serviceProvider;    }    public IPayment CreatePayment(PaymentType type)    {        return type switch        {            PaymentType.Upi =>                _serviceProvider.GetRequiredService<UpiPayment>(),            PaymentType.CreditCard =>                _serviceProvider.GetRequiredService<CreditCardPayment>(),            PaymentType.Bitcoin =>                _serviceProvider.GetRequiredService<BitcoinPayment>(),            _ => throw new ArgumentException("Invalid payment type")        };    }}
 
----
+📚 Dictionary-Based Factory
+Instead of procedural switch-case branching, this implementation uses:
+Dictionary<PaymentType, Func<IPayment>>
+to map payment types to resolver functions.
 
-## ⚔️ Factory vs Dependency Injection
+Why Dictionary-Based Factory?
+✅ Better than switch-case
+The dictionary approach converts:
+conditional logic
+into:
+resolver mapping
+This makes the factory:
 
-| Feature        | Factory               | Dependency Injection |
-| -------------- | --------------------- | -------------------- |
-| Responsibility | Creates objects       | Provides objects     |
-| Control        | Inside factory        | External container   |
-| Usage          | Object creation logic | Runtime wiring       |
 
-👉 In real-world systems → **Factory + DI together**
+Cleaner
 
----
 
-## 🚀 When to Use
+More maintainable
 
+
+Easier to extend
+
+
+More declarative
+
+
+
+Example
+private readonly IReadOnlyDictionary<PaymentType, Func<IPayment>> _paymentMappings;
+return _paymentMappings.TryGetValue(type, out var resolver)    ? resolver()    : throw new NotSupportedException($"Payment type '{type}' is not supported.");
+
+🔥 Why Use Dependency Injection Here?
+Using DI provides:
+
+
+Centralized dependency management
+
+
+Better testability
+
+
+Better scalability
+
+
+Runtime object resolution
+
+
+Cleaner architecture
+
+
+
+🧠 Important Insight
+The dictionary-based implementation improves extensibility compared to switch-case implementations.
+However, adding new payment types still requires:
+
+
+Adding new implementation
+
+
+Registering dependency
+
+
+Updating resolver mapping
+
+
+So the implementation is not fully closed for modification.
+
+⚔️ Factory vs Dependency Injection
+FeatureFactoryDependency InjectionResponsibilityCreates objectsProvides objectsControlInside factoryExternal containerUsageObject creation logicRuntime wiring
+👉 In real-world systems, Factory Pattern is commonly combined with Dependency Injection.
+
+✅ Benefits
+
+
+Loose coupling
+
+
+Centralized object creation
+
+
+Better maintainability
+
+
+Improved extensibility
+
+
+Easier testing
+
+
+Cleaner architecture
+
+
+
+⚠️ Trade-offs
+
+
+Additional abstraction layer
+
+
+More setup compared to direct object creation
+
+
+Dictionary registration still requires modification for new types
+
+
+
+🚀 When to Use
 Use Factory Pattern when:
 
-* Object creation is complex
-* Multiple implementations exist
-* Type is decided at runtime
-* You want scalable architecture
 
----
+Object creation is complex
 
-## 💡 Key Insight
 
-Loose coupling does NOT mean:
+Multiple implementations exist
 
-> “No code changes ever”
 
-It means:
+Type is decided at runtime
 
-> “Changes are localized and safe”
 
----
+You want scalable architecture
 
-## 🧪 Example Flow
 
-1. Client requests payment
-2. Factory decides implementation
-3. Object returned via interface
-4. Client executes behavior
+You want to decouple creation logic from business logic
 
----
 
-## 🧑‍💻 Run Project
 
-```bash
+🧪 Example Flow
+Client   ↓Factory   ↓Resolver Mapping / DI Container   ↓Concrete Payment Object   ↓ProcessPayment()
+
+🧑‍💻 Run Project
 dotnet run
-```
 
----
-
-## 📦 Dependencies
-
-```bash
+📦 Dependencies
 dotnet add package Microsoft.Extensions.DependencyInjection
-```
 
----
+🔮 Future Improvements
 
-## 🔮 Future Improvements
 
-* Add Strategy Pattern
-* Replace switch with Dictionary
-* Add Unit Tests
-* Integrate Logging
+Remove manual resolver registration
 
----
 
-## 📌 Conclusion
+Reflection-based auto registration
 
-Factory Pattern helps build:
 
-* Scalable systems
-* Maintainable code
-* Clean architecture
+Keyed services (.NET 8)
 
-👉 In production systems, it is commonly combined with **Dependency Injection** for maximum flexibility.
 
----
+Add Strategy Pattern
 
-[1]: https://www.geeksforgeeks.org/java/factory-method-design-pattern-in-java/?utm_source=chatgpt.com "Factory Method Design Pattern in Java"
-[2]: https://www.tutorialspoint.com/design_pattern/factory_pattern.htm?utm_source=chatgpt.com "Design Patterns - Factory Pattern"
+
+Add Unit Tests
+
+
+Integrate Logging
+
+
+
+📌 Conclusion
+Factory Pattern helps separate object creation from business logic and improves maintainability and scalability.
+This project demonstrates the evolution from simple factories to cleaner Dependency Injection and dictionary-based resolver approaches used in modern backend systems.
