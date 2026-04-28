@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "FmHOrpXAxag=",
+  "dgSpecHash": "IDZQVi3kFY0=",
   "success": true,
   "projectFilePath": "/Users/bhaveensaguturu/LLD-Design-Patterns/src/Factory/Factory.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/bhaveensaguturu/.nuget/packages/microsoft.extensions.dependencyinjection/10.0.7/microsoft.extensions.dependencyinjection.10.0.7.nupkg.sha512",
+    "/Users/bhaveensaguturu/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.7/microsoft.extensions.dependencyinjection.abstractions.10.0.7.nupkg.sha512"
+  ],
   "logs": []
 }
